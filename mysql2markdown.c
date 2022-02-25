@@ -230,6 +230,7 @@ if (!mysql_real_connect(mysql, Mhost, Muser, Mpsw, Mdatabase, Mport, NULL, 0))
              }
              return -1;  
        }  
+ mysql_query(mysql,"set names utf8mb4");
 typedef struct
 {
                 union 
@@ -333,7 +334,7 @@ POINT_VARCHAR(tset[1],tab.name);
 
 snprintf(tab.table_schema.var,tab.table_schema.alen-1,"%s",Mdatabase);
 tab.table_schema.len=strlen(tab.table_schema.var);
-
+tab.table_schema.nil=0;
 
 EASY_BLOCKBIND_ERREXIT(*ctx,SqlTables,stmttab,hset,hget) 
 ;
@@ -360,7 +361,7 @@ for(i=0;;i++)
                   break;
          }else if(MYSQL_NO_DATA==ret)
          {
-                printf("%d No more rows\n",__LINE__); 
+                 printf("database[%s] line: %d No more rows\n",tab.table_schema.var,__LINE__);
                  break;  
          }else if(MYSQL_DATA_TRUNCATED==ret)
          {
@@ -394,7 +395,7 @@ MMCLEAR(info.ColumnDefault) ;
                   break;
          }else if(MYSQL_NO_DATA==ret)
          {
-                printf("%s %d No more rows\n",tab.name.var,__LINE__); 
+                printf("[%s][%s] line: %d No more rows\n",tab.name.var,tab.name.var,__LINE__);
                  break;  
          }else if(MYSQL_DATA_TRUNCATED==ret)
          {
